@@ -5,8 +5,26 @@ public class Packet {
     private boolean isAck;
     private boolean isNack;
     private boolean isMessage;
+    private boolean simulatePacketLost;
+    private boolean simulateCorruptPacket;
     //may need to change it later
     private String checksum;
+
+    public boolean getSimulatePacketLost() {
+        return simulatePacketLost;
+    }
+
+    public void setSimulatePacketLost(boolean simulatePacketLost) {
+        this.simulatePacketLost = simulatePacketLost;
+    }
+
+    public boolean getSimulateCorruptPacket() {
+        return simulateCorruptPacket;
+    }
+
+    public void setSimulateCorruptPacket(boolean simulateCorruptPacket) {
+        this.simulateCorruptPacket = simulateCorruptPacket;
+    }
 
     public int getSequenceNumber() {
         return sequenceNumber;
