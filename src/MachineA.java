@@ -13,10 +13,15 @@ public class MachineA {
     }
 
     public String getMessageFromAboveLayer() {
+        String out = null;
         if (!GenerateString.queue.isEmpty()) {
-            return GenerateString.queue.poll();
+            try {
+                out = GenerateString.queue.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return out;
     }
 
     public Packet preparePacket(String message) {
