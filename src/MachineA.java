@@ -38,7 +38,7 @@ public class MachineA {
         if (seq % 5 == 4) {
             packet.setSimulateCorruptPacket(true);
         }
-
+        seq++;
         return packet;
 
 
@@ -49,32 +49,45 @@ public class MachineA {
     }
 
     public void processStarter() {
-        //Get message from above layer
-        String message = getMessageFromAboveLayer();
-        System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Message received from above layer " + message + Starter.ANSI_RESET);
+        boolean shouldPreparePacket = true;
+        int lastSeqSent = -1;
+        while (true) {
+            Packet packet = null;
+            if (shouldPreparePacket) {
+                //Get message from above layer
+                String message = getMessageFromAboveLayer();
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Message received from above layer " + message + Starter.ANSI_RESET);
 
-        //Prepare packet using the mesasge extracted above
-        Packet packet = preparePacket(message);
-        hashMapOfPackets.put(packet.getSequenceNumber(), packet);
-        System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet prepared!" + Starter.ANSI_RESET);
+                //Prepare packet using the mesasge extracted above
+                packet = preparePacket(message);
+                hashMapOfPackets.put(packet.getSequenceNumber(), packet);
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet prepared! Seq:" + packet.getSequenceNumber() + Starter.ANSI_RESET);
+            } else {
+                packet = hashMapOfPackets.get(Integer.valueOf(lastSeqSent));
+            }
 
-        //send packet to unreliable link
-        System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet sent to unreliable network" + Starter.ANSI_RESET);
-        sendPacketToUnreliableTransLinkSimulator(packet);
+            //send packet to unreliable link
+            lastSeqSent = packet.getSequenceNumber();
+            System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet sent to unreliable network" + Starter.ANSI_RESET);
+            sendPacketToUnreliableTransLinkSimulator(packet);
 
-        // Wait to receive ack
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            // Wait to receive ack
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        if (packet != null) {
-            System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + packet.getAckNumber() + Starter.ANSI_RESET);
-        } else {
-            System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
+            if (MachineA.packet != null) {
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + packet.getAckNumber() + Starter.ANSI_RESET);
+                hashMapOfPackets.remove(packet.getAckNumber());
+                MachineA.packet = null;
+                hasPacket = false;
+
+            } else {
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
+                shouldPreparePacket = false;
+            }
         }
     }
-
-
 }
