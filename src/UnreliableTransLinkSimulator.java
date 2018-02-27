@@ -1,3 +1,8 @@
+/**
+ * @author Yash Jain (yj8359)
+ * Maninder Singh Jheeta (msj5913)
+ */
+
 public class UnreliableTransLinkSimulator {
     static Packet packet;
 

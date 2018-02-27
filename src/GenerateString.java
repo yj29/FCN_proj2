@@ -2,6 +2,10 @@ import java.security.SecureRandom;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * @author Yash Jain (yj8359)
+ * Maninder Singh Jheeta (msj5913)
+ */
 public class GenerateString {
     //static Queue<String> queue = new LinkedList<String>();
     static int size = 10;
@@ -28,7 +32,6 @@ public class GenerateString {
 
 
             System.out.println(Starter.ANSI_YELLOW + "String with message:" + generatedString + " generated.." + queue.size() + Starter.ANSI_RESET);
-            //  GenerateString.count++;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

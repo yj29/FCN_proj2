@@ -1,6 +1,11 @@
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Yash Jain (yj8359)
+ * Maninder Singh Jheeta (msj5913)
+ */
+
 public class MachineA {
     static int seq = 0;
     static Packet packet = null;

@@ -1,3 +1,7 @@
+/**
+ * @author Yash Jain (yj8359)
+ * Maninder Singh Jheeta (msj5913)
+ */
 
 public class MachineB {
     static Packet packet;
