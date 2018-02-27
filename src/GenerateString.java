@@ -10,7 +10,7 @@ public class GenerateString {
 
     public void generateString() {
         while (true) {
-            while (queue.size() < size) {
+            if (queue.size() < size) {
                 String generatedString = "";
                 for (int i = 0; i < 2; i++) {
                     generatedString += String.valueOf(set.charAt(secureRandom.nextInt(set.length())));

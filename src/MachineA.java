@@ -64,11 +64,12 @@ public class MachineA {
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet prepared! Seq:" + packet.getSequenceNumber() + Starter.ANSI_RESET);
             } else {
                 packet = hashMapOfPackets.get(Integer.valueOf(lastSeqSent));
+                packet.setSimulatePacketLost(false);
             }
 
             //send packet to unreliable link
             lastSeqSent = packet.getSequenceNumber();
-            System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet sent to unreliable network" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet with seq " + packet.getSequenceNumber() + " sent to unreliable network" + Starter.ANSI_RESET);
             sendPacketToUnreliableTransLinkSimulator(packet);
 
             // Wait to receive ack
@@ -79,11 +80,12 @@ public class MachineA {
             }
 
             if (MachineA.packet != null) {
-                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + packet.getAckNumber() + Starter.ANSI_RESET);
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + MachineA.packet.getAckNumber() + Starter.ANSI_RESET);
                 hashMapOfPackets.remove(packet.getAckNumber());
                 MachineA.packet = null;
                 hasPacket = false;
-
+                shouldPreparePacket = true;
+                System.out.println(Starter.ANSI_BLUE + "=====================================================" + Starter.ANSI_RESET);
             } else {
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
                 shouldPreparePacket = false;
