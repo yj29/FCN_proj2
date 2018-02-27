@@ -17,13 +17,13 @@ public class MachineB {
 
         MachineB.packet = packet;
         MachineB.hasPacket = true;
-        System.out.println(Starter.ANSI_GREEN + "            MachineB -> Packet received!" + Starter.ANSI_RESET);
+        System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Packet received!" + Starter.ANSI_RESET);
         Packet ackPacket = processReceivedPacket();
         MachineB.packet = null;
         MachineB.hasPacket = false;
 
         //send ack
-        System.out.println(Starter.ANSI_GREEN + "            MachineB -> Sending Ack to Unreliable network" + Starter.ANSI_RESET);
+        System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Sending Ack to Unreliable network" + Starter.ANSI_RESET);
         sendAckToUnreliableNetwork(ackPacket);
     }
 
@@ -32,20 +32,20 @@ public class MachineB {
     }
 
     private static Packet processReceivedPacket() {
-        System.out.println(Starter.ANSI_GREEN + "            MachineB-> Computing checksum of received packet." + Starter.ANSI_RESET);
+        System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Computing checksum of received packet." + Starter.ANSI_RESET);
         boolean isValidPacket = checkCheckSum();
         Packet packetToSend = null;
         if (isValidPacket) {
-            System.out.println(Starter.ANSI_GREEN + "            MachineB -> Correct packet, no checksum error" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Correct packet, no checksum error" + Starter.ANSI_RESET);
             lastCorrectMessage = packet.getSequenceNumber();
             packetToSend = prepareAck(packet.getSequenceNumber());
-            System.out.println(Starter.ANSI_GREEN + "            MachineB -> Ack prepared" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Ack prepared" + Starter.ANSI_RESET);
             MachineB.packet = null;
             MachineB.hasPacket = false;
         } else {
-            System.out.println(Starter.ANSI_GREEN + "            MachineB -> Corrupt packet, checksum error" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Corrupt packet, checksum error" + Starter.ANSI_RESET);
             packetToSend = prepareAck(lastCorrectMessage);
-            System.out.println(Starter.ANSI_GREEN + "            MachineB -> Ack prepared" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Ack prepared" + Starter.ANSI_RESET);
         }
         return packetToSend;
     }
