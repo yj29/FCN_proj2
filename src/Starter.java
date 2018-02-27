@@ -1,4 +1,8 @@
 public class Starter extends Thread {
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_GREEN = "\u001B[32m";
     public static void main(String[] args) {
         Thread thread = new Thread() {
             @Override
@@ -15,21 +19,7 @@ public class Starter extends Thread {
             e.printStackTrace();
         }
 
-
-        System.out.println("Here");
         MachineA machineA = new MachineA();
-        //Get message from above layer
-        String message = machineA.getMessageFromAboveLayer();
-        System.out.println("Message received from above layer " + message);
-
-        //Prepare packet using the mesasge extracted above
-        Packet packet = machineA.preparePacket(message);
-        System.out.println("Packet prepated!");
-
-        //send packet to unreliable link
-        machineA.sendPacketToUnreliableTransLinkSimulator(packet);
-        System.out.println("Packet sent to unreliable network");
-
-
+        machineA.processStarter();
     }
 }

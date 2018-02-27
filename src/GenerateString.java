@@ -16,7 +16,7 @@ public class GenerateString {
                     generatedString += String.valueOf(set.charAt(secureRandom.nextInt(set.length())));
                 }
                 queue.offer(generatedString);
-                System.out.println("String with message:" + generatedString + " generated.." + queue.size());
+                System.out.println(Starter.ANSI_YELLOW + "String with message:" + generatedString + " generated.." + queue.size() + Starter.ANSI_RESET);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
