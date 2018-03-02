@@ -7,8 +7,9 @@ public class MachineB {
     static Packet packet;
     static boolean hasPacket = false;
     static int lastCorrectMessage = -1;
+    static int numberOfPacketsReceived = 0;
 
-    public static void recievepacketFromUnreliableNetwork(Packet packet) {
+    public static void recievePacketFromUnreliableNetwork(Packet packet) {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -17,7 +18,8 @@ public class MachineB {
 
         MachineB.packet = packet;
         MachineB.hasPacket = true;
-        System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Packet received!" + Starter.ANSI_RESET);
+        numberOfPacketsReceived++;
+        System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Packet received with seq" + MachineB.packet.getSequenceNumber() + Starter.ANSI_RESET);
         Packet ackPacket = processReceivedPacket();
         MachineB.packet = null;
         MachineB.hasPacket = false;
@@ -58,6 +60,13 @@ public class MachineB {
         packet.setAckNumber(ackNumber);
         packet.setSimulatePacketLost(false);
         packet.setSimulateCorruptPacket(false);
+
+        if (numberOfPacketsReceived % 6 == 0) {
+            packet.setSimulatePacketLost(true);
+        }
+        if (numberOfPacketsReceived % 7 == 0) {
+            packet.setSimulateCorruptPacket(true);
+        }
         return packet;
     }
 

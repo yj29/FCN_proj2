@@ -31,7 +31,7 @@ public class MachineA {
 
     public Packet preparePacket(String message) {
         Packet packet = new Packet();
-        packet.setSequenceNumber(seq);
+        packet.setSequenceNumber(seq % 2);
         packet.setMessage(message);
         packet.setIsMessage(true);
         packet.setIsAck(false);
@@ -68,7 +68,7 @@ public class MachineA {
                 String message = getMessageFromAboveLayer();
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Message received from above layer " + message + Starter.ANSI_RESET);
 
-                //Prepare packet using the mesasge extracted above
+                //Prepare packet using the message extracted above
                 packet = preparePacket(message);
                 hashMapOfPackets.put(packet.getSequenceNumber(), packet);
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A ->Packet prepared! Seq:" + packet.getSequenceNumber() + Starter.ANSI_RESET);
@@ -98,6 +98,7 @@ public class MachineA {
                 System.out.println(Starter.ANSI_BLUE + "=====================================================" + Starter.ANSI_RESET);
             } else {
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending packet.");
                 shouldPreparePacket = false;
             }
         }

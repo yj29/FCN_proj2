@@ -43,7 +43,7 @@ public class UnreliableTransLinkSimulator {
 
     private static void sendPacketToMachineB() {
         System.out.println("        URN -> Sending packet to MachineB");
-        MachineB.recievepacketFromUnreliableNetwork(packet);
+        MachineB.recievePacketFromUnreliableNetwork(packet);
     }
 
 }
