@@ -16,7 +16,7 @@ public class MachineB {
 
     public static void recievePacketFromUnreliableNetwork(Packet packet) {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,6 +58,7 @@ public class MachineB {
             packetToSend = prepareAck(lastCorrectMessage);
             packetToSend.setSimulatePacketLost(false);
             packetToSend.setSimulateCorruptPacket(false);
+            packetToSend.setShouldDelayAck(false);
             System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Ack prepared" + Starter.ANSI_RESET);
         } else if (!isValidPacket) {
             System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Corrupt packet, checksum error" + Starter.ANSI_RESET);

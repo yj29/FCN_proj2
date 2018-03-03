@@ -1,4 +1,3 @@
-import javax.crypto.Mac;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ public class MachineA {
     static Packet packet = null;
     static boolean hasPacket;
     static Map<Integer, Packet> hashMapOfPackets = new HashMap<Integer, Packet>();
+    static boolean shouldRead = false;
 
     public static void receiveAckMessageFromURN(Packet packet) {
         MachineA.packet = packet;
@@ -41,15 +41,17 @@ public class MachineA {
         packet.setSimulateCorruptPacket(false);
 
         //set lost bit on
-        if (seq % 5 == 1) {
-            packet.setSimulatePacketLost(true);
-            System.out.println(Starter.ANSI_BLUE + "    CASE - 2" + message + Starter.ANSI_RESET);
-        }
+        if (seq < 5) {
+            if (seq % 5 == 1) {
+                packet.setSimulatePacketLost(true);
+                System.out.println(Starter.ANSI_BLUE + "    CASE - 2" + message + Starter.ANSI_RESET);
+            }
 
-        //set corrupt bit on
-        if (seq % 5 == 2) {
-            packet.setSimulateCorruptPacket(true);
-            System.out.println(Starter.ANSI_BLUE + "    CASE - 3" + message + Starter.ANSI_RESET);
+            //set corrupt bit on
+            if (seq % 5 == 2) {
+                packet.setSimulateCorruptPacket(true);
+                System.out.println(Starter.ANSI_BLUE + "    CASE - 3" + message + Starter.ANSI_RESET);
+            }
         }
         seq++;
         return packet;
@@ -57,8 +59,16 @@ public class MachineA {
 
     }
 
-    public void sendPacketToUnreliableTransLinkSimulator(Packet packet) {
-        UnreliableTransLinkSimulator.setPacketInLink(packet);
+    public void sendPacketToUnreliableTransLinkSimulator(final Packet packet) {
+        //UnreliableTransLinkSimulator.setPacketInLink(packet);
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                UnreliableTransLinkSimulator.setPacketInLink(packet);
+            }
+        };
+        t.start();
+
     }
 
     public void processStarter() {
@@ -88,34 +98,53 @@ public class MachineA {
 
             // Wait to receive ack
             try {
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if (MachineA.packet != null) {
-                if (lastSeqSent != MachineA.packet.getAckNumber()) {
-                    System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending" + Starter.ANSI_RESET);
-                    shouldPreparePacket = false;
+
+            long startTime = System.nanoTime();
+            long endTime;
+            while (!shouldRead) {
+                endTime = System.nanoTime();
+                if (((endTime - startTime) / 1000000) > 1000) break;
+            }
+            // shouldRead = false;
+            System.out.println("in here");
+
+            if (shouldRead) {
+                Packet ack = UnreliableTransLinkSimulator.queue.poll();
+                if (ack != null) {
+                    if (lastSeqSent != ack.getAckNumber()) {
+                        System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending" + Starter.ANSI_RESET);
+                        shouldPreparePacket = false;
+                        MachineA.packet = null;
+                        hasPacket = false;
+                        continue;
+                    }
+                    if (ack.getSimulateCorruptPacket()) {
+                        System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending" + Starter.ANSI_RESET);
+                        shouldPreparePacket = false;
+                        MachineA.packet = null;
+                        hasPacket = false;
+                        continue;
+                    }
+                    System.out.println(UnreliableTransLinkSimulator.queue.size());
+                    System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + ack.getAckNumber() + Starter.ANSI_RESET);
+                    hashMapOfPackets.remove(packet.getAckNumber());
                     MachineA.packet = null;
                     hasPacket = false;
-                    continue;
-                }
-                if (MachineA.packet.getSimulateCorruptPacket()) {
-                    System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending" + Starter.ANSI_RESET);
+                    shouldPreparePacket = true;
+                    System.out.println(Starter.ANSI_BLUE + "=====================================================" + Starter.ANSI_RESET);
+                } else {
+                    System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
+                    System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending packet.");
                     shouldPreparePacket = false;
-                    MachineA.packet = null;
-                    hasPacket = false;
-                    continue;
                 }
-                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Ack received with #" + MachineA.packet.getAckNumber() + Starter.ANSI_RESET);
-                hashMapOfPackets.remove(packet.getAckNumber());
-                MachineA.packet = null;
-                hasPacket = false;
-                shouldPreparePacket = true;
-                System.out.println(Starter.ANSI_BLUE + "=====================================================" + Starter.ANSI_RESET);
+                shouldRead = false;
             } else {
-                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received.");
+                System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> TIMEOUT...Ack not received case6.");
                 System.out.println(Starter.ANSI_BLUE + "    MACHINE-A -> Resending packet.");
                 shouldPreparePacket = false;
             }
