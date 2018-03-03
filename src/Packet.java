@@ -11,8 +11,26 @@ public class Packet {
     private boolean isMessage;
     private boolean simulatePacketLost;
     private boolean simulateCorruptPacket;
+    private boolean isDuplicateInAck;
+    private boolean shouldDelayAck;
     //may need to change it later
     private String checksum;
+
+    public boolean getShouldDelayAck() {
+        return shouldDelayAck;
+    }
+
+    public void setShouldDelayAck(boolean shouldDelayAck) {
+        this.shouldDelayAck = shouldDelayAck;
+    }
+
+    public boolean getDuplicateInAck() {
+        return isDuplicateInAck;
+    }
+
+    public void setDuplicateInAck(boolean duplicateInAck) {
+        isDuplicateInAck = duplicateInAck;
+    }
 
     public boolean getSimulatePacketLost() {
         return simulatePacketLost;
