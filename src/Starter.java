@@ -10,6 +10,8 @@ public class Starter extends Thread {
     public static final String ANSI_GREEN = "\u001B[32m";
 
     public static void main(String[] args) {
+        //thread that initiates the method to continuously generate message
+        // mimic of the application layer
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -25,6 +27,7 @@ public class Starter extends Thread {
             e.printStackTrace();
         }
 
+        //Starts the process
         MachineA machineA = new MachineA();
         machineA.processStarter();
     }

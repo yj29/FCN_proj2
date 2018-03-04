@@ -14,6 +14,10 @@ public class GenerateString {
     SecureRandom secureRandom = new SecureRandom();
     static String set = "abcdefghijklmnopqrstuvwxyz";
 
+
+    /**
+     * Continuous string generator
+     */
     public void generateString() {
         while (true) {
             if (queue.size() == size) {

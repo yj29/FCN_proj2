@@ -1,9 +1,15 @@
+
+/**
+ * @author Yash Jain (yj8359)
+ * Maninder Singh Jheeta (msj5913)
+ */
 public class Checksum {
-
-    public static void main(String[] args) {
-
-    }
-
+    /**
+     * This mehtod computes the checksum
+     *
+     * @param data
+     * @return
+     */
     public static String checkSum(String data) {
         String charAtDataPos1 = Integer.toBinaryString(data.charAt(0));
         String charAtDataPos2 = Integer.toBinaryString(data.charAt(1));
@@ -14,6 +20,13 @@ public class Checksum {
         return checkSum;
     }
 
+    /**
+     * Contributes to the checksum computation by doing binary addition
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
     public static String sumBinary(String s1, String s2) {
         StringBuilder sb1 = new StringBuilder(s1);
         StringBuilder sb2 = new StringBuilder(s2);
@@ -41,6 +54,12 @@ public class Checksum {
         return binarySum.toString();
     }
 
+    /**
+     * Takes one's complement of the binary to finalize the checksum value
+     *
+     * @param s
+     * @return
+     */
     public static String onesComplement(String s) {
         StringBuilder sb = new StringBuilder(s);
         for (int i = 0; i < sb.length(); i++) {
@@ -53,6 +72,13 @@ public class Checksum {
         return sb.toString();
     }
 
+    /**
+     * Checks if the message has correct checksum
+     *
+     * @param data
+     * @param checksum
+     * @return
+     */
     public static boolean isChecksumValid(String data, String checksum) {
         String charAtDataPos1 = Integer.toBinaryString(data.charAt(0));
         String charAtDataPos2 = Integer.toBinaryString(data.charAt(1));

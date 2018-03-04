@@ -18,6 +18,10 @@ public class MachineA {
         MachineA.hasPacket = true;
     }
 
+    /**
+     * Receives the message from the layer above
+     * @return the message string
+     */
     public String getMessageFromAboveLayer() {
         String out = null;
         if (!GenerateString.queue.isEmpty()) {
@@ -30,6 +34,11 @@ public class MachineA {
         return out;
     }
 
+    /**
+     * Prepares the packet to be sent to the URN
+     * @param message
+     * @return
+     */
     public Packet preparePacket(String message) {
         Packet packet = new Packet();
         packet.setSequenceNumber(seq % 2);
@@ -60,6 +69,10 @@ public class MachineA {
 
     }
 
+    /**
+     * Mimic the process of sending the packet to the Unreliable Network
+     * @param packet
+     */
     public void sendPacketToUnreliableTransLinkSimulator(final Packet packet) {
         //UnreliableTransLinkSimulator.setPacketInLink(packet);
         Thread t = new Thread() {
@@ -72,6 +85,9 @@ public class MachineA {
 
     }
 
+    /**
+     * Kick starter of the entire process
+     */
     public void processStarter() {
         boolean shouldPreparePacket = true;
         int lastSeqSent = -1;

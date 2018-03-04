@@ -11,6 +11,12 @@ public class UnreliableTransLinkSimulator {
     static Packet packetFromB;
     static BlockingQueue<Packet> queue = new LinkedBlockingQueue<Packet>();
 
+    /**
+     * Method that is being called everytime to receive packet in URN.
+     * This method simulates the packet lost, corrupt and packet delaying in URN
+     *
+     * @param packet
+     */
     public static void setPacketInLink(final Packet packet) {
         try {
             Thread.sleep(500);
