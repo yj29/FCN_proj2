@@ -45,13 +45,13 @@ public class MachineA {
         if (seq < 5) {
             if (seq % 5 == 1) {
                 packet.setSimulatePacketLost(true);
-                System.out.println(Starter.ANSI_BLUE + "    CASE - 2" + message + Starter.ANSI_RESET);
+                System.out.println(Starter.ANSI_BLUE + "    CASE - 2" + Starter.ANSI_RESET);
             }
 
             //set corrupt bit on
             if (seq % 5 == 2) {
                 packet.setSimulateCorruptPacket(true);
-                System.out.println(Starter.ANSI_BLUE + "    CASE - 3" + message + Starter.ANSI_RESET);
+                System.out.println(Starter.ANSI_BLUE + "    CASE - 3" + Starter.ANSI_RESET);
             }
         }
         seq++;
