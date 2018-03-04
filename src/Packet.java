@@ -16,6 +16,14 @@ public class Packet {
     //may need to change it later
     private String checksum;
 
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
+    }
+
     public boolean getShouldDelayAck() {
         return shouldDelayAck;
     }

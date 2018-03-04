@@ -54,7 +54,7 @@ public class MachineB {
             MachineB.hasPacket = false;
 
         } else if (!isNotDuplicate) {
-            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Duplicate packe/t" + Starter.ANSI_RESET);
+            System.out.println(Starter.ANSI_GREEN + "            MACHINE-B -> Duplicate packet" + Starter.ANSI_RESET);
             packetToSend = prepareAck(lastCorrectMessage);
             packetToSend.setSimulatePacketLost(false);
             packetToSend.setSimulateCorruptPacket(false);
@@ -116,6 +116,8 @@ public class MachineB {
             return false;
         }
         return true;
+        //System.out.println("HHHHHHHHHHHHHH");
+        //return Checksum.isChecksumValid(MachineB.packet.getMessage(), MachineB.packet.getChecksum());
     }
 
 }

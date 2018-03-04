@@ -23,6 +23,7 @@ public class UnreliableTransLinkSimulator {
         if (packet.getSimulatePacketLost()) {
             if (packet.getIsMessage()) {
                 packetFromA = null;
+                MachineA.shouldRead = true;
             } else {
                 packetFromB = null;
                 MachineA.shouldRead = true;
@@ -34,6 +35,17 @@ public class UnreliableTransLinkSimulator {
         //simulate packet corrupt
         if (packet.getSimulateCorruptPacket()) {
             // Add logic to change checksum to corrupt the incoming packet
+            if (packet.getIsMessage()) {
+                String checkSum = packet.getChecksum();
+                String corrupt;
+                corrupt = checkSum.substring(0, checkSum.length());
+                if (checkSum.charAt(checkSum.length() - 1) == '1') {
+                    corrupt += '0';
+                } else {
+                    corrupt += '1';
+                }
+                packet.setChecksum(corrupt);
+            }
         }
 
         //simulate delaying ack

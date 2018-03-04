@@ -39,6 +39,7 @@ public class MachineA {
         packet.setIsNack(false);
         packet.setSimulatePacketLost(false);
         packet.setSimulateCorruptPacket(false);
+        packet.setChecksum(Checksum.checkSum(message));
 
         //set lost bit on
         if (seq < 5) {
@@ -89,6 +90,7 @@ public class MachineA {
                 packet = hashMapOfPackets.get(Integer.valueOf(lastSeqSent));
                 packet.setSimulatePacketLost(false);
                 packet.setSimulateCorruptPacket(false);
+                packet.setChecksum(packet.getMessage());
             }
 
             //send packet to unreliable link
@@ -108,10 +110,10 @@ public class MachineA {
             long endTime;
             while (!shouldRead) {
                 endTime = System.nanoTime();
-                if (((endTime - startTime) / 1000000) > 1000) break;
+                if (((endTime - startTime) / 1000000) > 2000) break;
             }
             // shouldRead = false;
-            System.out.println("in here");
+            //System.out.println("in here");
 
             if (shouldRead) {
                 Packet ack = UnreliableTransLinkSimulator.queue.poll();
